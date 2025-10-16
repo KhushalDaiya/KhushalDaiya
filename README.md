@@ -2,8 +2,6 @@
   <img src="https://github.com/KhushalDaiya/KhushalDaiya/blob/main/Banner.png?raw=true" alt="Banner" width="100%">
 </p>
 
-https://github.com/KhushalDaiya/KhushalDaiya/blob/main/Banner.png?raw=true
-
 <h1 align="center">Hi 👋, I'm Khushal Daiya</h1>
 <h3 align="center">A passionate developer from India</h3>
 
