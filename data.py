@@ -22,14 +22,23 @@ email = input("Enter Email : ")
 mobile = input("Enter Mobile no.: ")
 
 
-if email.endswith("@gmail.com"):
+if not name.strip() or not email.strip() or not mobile.strip():
+    print("Name, Email, and Mobile number cannot be empty.")
+
+elif not email.endswith("@gmail.com"):
+    print("Email must end with '@gmail.com'.")
+
+elif not mobile.isdigit():
+    print("Mobile number must contain only digits.")
+
+elif len(mobile) != 10:
+    print("Mobile number must be exactly 10 digits.")
+
+else:
     query = "INSERT INTO user (name, email, mobile) VALUES (%s, %s, %s)"
     values = (name, email, mobile)
     cursor.execute(query, values)
     connection.commit()
-
     print("Data inserted successfully!")
-else:
 
-    print("Invalid email! Please enter a Gmail address (must end with @gmail.com).")
 
