@@ -1,6 +1,6 @@
 import mysql.connector  
 
-connection = mysql.connector.connect(host='127.0.0.1',user='root',password="Satyampurohit0000" ,database='axixa')
+connection = mysql.connector.connect(host='127.0.0.1',user='root',password="khus" ,database='database')
     
 # print(connection.is_connected())
 
@@ -28,6 +28,7 @@ if email.endswith("@gmail.com"):
     cursor.execute(query, values)
     connection.commit()
 
-    print("✅ Data inserted successfully!")
+    print("Data inserted successfully!")
 else:
-    print("❌ Invalid email! Please enter a Gmail address (must end with @gmail.com).")
+
+    print("Invalid email! Please enter a Gmail address (must end with @gmail.com).")
