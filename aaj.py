@@ -1,5 +1,9 @@
 import mysql.connector
-
+RED = '\033[31m'
+GREEN = '\033[32m'
+YELLOW = '\033[33m'
+BLUE = '\033[34m'
+RESET = '\033[0m'
 connection = mysql.connector.connect(
     host='127.0.0.1',
     user='root', 
@@ -14,11 +18,11 @@ user_choice = {
     4: 'SELECT'
 }
 ask_user_choice = f"""
-Please select your choice:
+{BLUE}Please select your choice:
 Press 1 for Insert
 Press 2 for Update
 Press 3 for Delete
-Press 4 for Select
+Press 4 for Select{RESET}
 """
 while True:
     user_select_choice = input(ask_user_choice)
@@ -26,38 +30,38 @@ while True:
     if realvalid_choice:
         if realvalid_choice == 'INSERT':
             while True:
-                name = input('Enter name to insert: ')
+                name = input(BLUE + 'Enter name to insert: ' + RESET)
                 if len(name) >= 5 and len(name) <= 20:
                     break
                 else:
-                    print("Please enter a valid name with Min 5 and Max 10 and all char should be Alpha")
-
+                    print(RED + "Please enter a valid name with Min 5 and Max 10 and all char should be Alpha" + RESET)
+                    
             while True:
-                email = input('Enter email to insert: ')
+                email = input(BLUE + 'Enter email to insert: ' + RESET)
                 if 13 <= len(email) <= 20 and email.endswith('@gmail.com'):
                     break
                 else:
-                    print("Please enter a valid email address (length upto 13-20 characters).")
+                    print(RED + "Please enter a valid email address (length upto 13-20 characters)." + RESET)
             
             while True:
-                mobile = input('Enter mobile to insert: ')
+                mobile = input(BLUE + 'Enter mobile to insert: ' + RESET)
                 if mobile.isdigit() and len(mobile) == 10:
                     break
                 else:
-                    print("Please enter a valid 10-digit mobile number (only digits).")
+                    print(RED + "Please enter a valid 10-digit mobile number (only digits)." + RESET)
 
             query = "INSERT INTO user (name, email, mobile) VALUES (%s, %s, %s)"
             cursor.execute(query, (name, email, mobile))
             connection.commit()
-            print("Record inserted successfully")
+            print(GREEN + "Record inserted successfully" + RESET)
         
         elif realvalid_choice == 'DELETE':
             while True:
-                userid = input('Enter the user ID to delete: ')
+                userid = input(BLUE + 'Enter the user ID to delete: ' + RESET)
                 if userid.isdigit():
                     break
                 else:
-                    print("Please enter a valid integer ID.")
+                    print(RED + "Please enter a valid integer ID." + RESET)
 
             cursor.execute("SELECT * FROM user WHERE id = %s", (userid,))
             record = cursor.fetchone()
@@ -71,4 +75,4 @@ while True:
         else:
             print('WIP')
     else:
-        print('Please enter a valid number')
+        print(RED + 'Please enter a valid number' + RESET)
