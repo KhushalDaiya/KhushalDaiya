@@ -1,4 +1,8 @@
 import mysql.connector
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 RED = '\033[31m'
 GREEN = '\033[32m'
 YELLOW = '\033[33m'
@@ -6,11 +10,12 @@ BLUE = '\033[34m'
 RESET = '\033[0m'
 
 connection = mysql.connector.connect(
-    host='127.0.0.1',
-    user='root',
-    password='khus',
-    database='python_batch'
+    host=os.getenv('DB_HOST'),
+    user=os.getenv('DB_USER'), 
+    password=os.getenv('DB_PASSWORD'), 
+    database=os.getenv('DB_DATABASE')
 )
+DB_TABLE = os.getenv('DB_TABLE')
 cursor = connection.cursor(dictionary=True)
 
 user_choice = {
@@ -62,7 +67,7 @@ while True:
                 else:
                     print(RED + "Please enter a valid 10-digit mobile number (only digits)." + RESET)
 
-            query = "INSERT INTO user (name, email, mobile) VALUES (%s, %s, %s)"
+            query = f"INSERT INTO {DB_TABLE} (name, email, mobile) VALUES (%s, %s, %s)"
             cursor.execute(query, (name, email, mobile))
             connection.commit()
             print(GREEN + "Record inserted successfully" + RESET)
@@ -75,11 +80,11 @@ while True:
                 else:
                     print(RED + "Please enter a valid integer ID." + RESET)
 
-            cursor.execute("SELECT * FROM user WHERE id = %s", (userid,))
+            cursor.execute(f"SELECT * FROM {DB_TABLE} WHERE id = %s", (userid,))
             record = cursor.fetchone()
 
             if record:
-                cursor.execute("DELETE FROM user WHERE id = %s", (userid,))
+                cursor.execute(f"DELETE FROM {DB_TABLE} WHERE id = %s", (userid,))
                 connection.commit()
                 print(GREEN + f"Record with ID {userid} deleted successfully." + RESET)
             else:
@@ -88,7 +93,7 @@ while True:
         elif realvalid_choice == 'SELECT':
             offset = 0
             while True:
-                cursor.execute("SELECT COUNT(*) as total FROM user")
+                cursor.execute(f"SELECT COUNT(*) as total FROM {DB_TABLE}")
                 total_records = cursor.fetchone()['total']
                 if total_records == 0:
                     print(RED + "No records found in database." + RESET)
@@ -101,7 +106,7 @@ while True:
 
                 limit = int(limit_input)
 
-                cursor.execute(f"SELECT * FROM user LIMIT {limit} OFFSET {offset}")
+                cursor.execute(f"SELECT * FROM {DB_TABLE} LIMIT {limit} OFFSET {offset}")
                 records = cursor.fetchall()
 
                 if not records:
@@ -136,7 +141,7 @@ while True:
         
         elif realvalid_choice == 'UPDATE':
 
-            cursor.execute("SELECT * FROM user")
+            cursor.execute(f"SELECT * FROM {DB_TABLE}")
             records = cursor.fetchall()
             if not records:
                 print(RED + "No records available to update." + RESET)
@@ -152,7 +157,7 @@ while True:
                     print(RED + "Invalid ID. Please enter a numeric value." + RESET)
                     continue
 
-                cursor.execute("SELECT * FROM user WHERE id = %s", (userid,))
+                cursor.execute(f"SELECT * FROM {DB_TABLE} WHERE id = %s", (userid,))
                 existing = cursor.fetchone()
 
                 if existing:
@@ -195,7 +200,7 @@ while True:
                 else:
                     print(RED + "Please enter a valid 10-digit mobile number." + RESET)
 
-            update_query = "UPDATE user SET name = %s, email = %s, mobile = %s WHERE id = %s"
+            update_query = f"UPDATE {DB_TABLE} SET name = %s, email = %s, mobile = %s WHERE id = %s"
             cursor.execute(update_query, (new_name, new_email, new_mobile, userid))
             connection.commit()
             print(GREEN + f"\nRecord with ID {userid} updated successfully!" + RESET)
